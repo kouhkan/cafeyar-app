@@ -1,4 +1,3 @@
-
 import 'package:cafeyar_app/components/default_button.dart';
 import 'package:cafeyar_app/constants.dart';
 import 'package:cafeyar_app/screens/on_board/components/on_board_content.dart';
@@ -9,31 +8,33 @@ import 'package:cafeyar_app/texts/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class Body extends StatefulWidget {
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     checkFirstTime();
   }
-  Future<bool> checkFirstTime() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    bool checkScreen = sharedPreferences.getBool("isFirstTime") ?? false;
-    print(sharedPreferences.containsKey("isFirstTime")); // check your key either it is save or not?
 
-    if (checkScreen == true) {
+  void checkFirstTime() async {
+    const String theKey = "isSecondTime";
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool isSecondTime = sharedPreferences.getBool(theKey) ?? false;
+    print("isSecondTime " +
+        sharedPreferences
+            .containsKey(theKey)
+            .toString()); // check your key either it is save or not?
+
+    if (isSecondTime == true) {
       Navigator.pushReplacementNamed(context, RegisterScreen.routeName);
     } else {
-      sharedPreferences.setBool("isFirstTime", true);
-      Navigator.pushReplacementNamed(context, OnBoardScreen.routeName);
+      sharedPreferences.setBool(theKey, true);
     }
-    return checkScreen;
   }
 
   int currentPage = 0;
@@ -51,6 +52,7 @@ class _BodyState extends State<Body> {
       "image": "assets/images/img3.jpg"
     },
   ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -85,14 +87,19 @@ class _BodyState extends State<Body> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
                         splashData.length,
-                            (index) => buildDot(index: index),
+                        (index) => buildDot(index: index),
                       ),
                     ),
                     Spacer(flex: 3),
                     DefaultButton(
-                      text: AppText(text: 'ادامه', color: Colors.white, size: 24,),
+                      text: AppText(
+                        text: 'ادامه',
+                        color: Colors.white,
+                        size: 24,
+                      ),
                       press: () {
-                        Navigator.pushReplacementNamed(context, RegisterScreen.routeName);
+                        Navigator.pushReplacementNamed(
+                            context, RegisterScreen.routeName);
                       },
                     ),
                     Spacer(),
